@@ -1,0 +1,37 @@
+{% extends 'layout/base.html' %}
+{% block title %}Зарплаты - Лаб 4{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h1>Выплата зарплаты</h1>
+        <div style="text-align: right;">
+            <div style="color: var(--text-muted); font-size: 0.9rem;">Текущий бюджет:</div>
+            <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent);">{{ budget.amount|floatformat:2 }}
+                сом</div>
+        </div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ФИО</th>
+                <th>Должность</th>
+                <th>Оклад</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in sotrudniki %}
+            <tr>
+                <td>{{ s.fio }}</td>
+                <td>{{ s.id_dolzhnosti.name }}</td>
+                <td>{{ s.salary }} сом</td>
+                <td>
+                    <a href="{% url 'zarplata_pay' s.id %}" class="btn"
+                        style="padding: 0.4rem 0.8rem; font-size: 0.8rem; background: var(--accent);">Выплатить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

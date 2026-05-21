@@ -1,0 +1,102 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Заявки на производство{% endblock %}
+
+{% block extra_style %}
+.status-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    display: inline-block;
+}
+.status-created    { background: rgba(148,163,184,0.2); color: #94a3b8; }
+.status-check      { background: rgba(251,191,36,0.15); color: #fbbf24; }
+.status-purchase   { background: rgba(59,130,246,0.15); color: #60a5fa; }
+.status-production { background: rgba(167,139,250,0.15); color: #a78bfa; }
+.status-sale       { background: rgba(52,211,153,0.15); color: #34d399; }
+.status-done       { background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid #10b981; }
+.status-error      { background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid #ef4444; }
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="margin-bottom: 0.25rem;">Заявки на производство</h1>
+            {% if not request.user.is_staff %}
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Ваши заявки обрабатываются автоматически</p>
+            {% endif %}
+        </div>
+        <a href="{% url 'zayavki_create' %}" class="btn">+ Новая заявка</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Дата создания</th>
+                <th>Продукция</th>
+                <th>Кол-во</th>
+                <th>Заявитель</th>
+                <th>Статус</th>
+                {% if request.user.is_staff %}<th>Действия</th>{% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for z in zayavki %}
+            <tr>
+                <td style="color: var(--text-muted);">{{ z.id }}</td>
+                <td>{{ z.created_at|date:"d.m.Y H:i" }}</td>
+                <td><strong>{{ z.id_produkcii.name }}</strong></td>
+                <td>{{ z.quantity }}</td>
+                <td>{{ z.applicant_fio }}</td>
+                <td>
+                    {% if z.status == 'Создана' %}
+                        <span class="status-badge status-created">{{ z.status }}</span>
+                    {% elif z.status == 'На проверке наличия сырья' %}
+                        <span class="status-badge status-check">{{ z.status }}</span>
+                    {% elif z.status == 'На процессе закупки сырья' %}
+                        <span class="status-badge status-purchase">{{ z.status }}</span>
+                    {% elif z.status == 'На процессе производства' %}
+                        <span class="status-badge status-production">{{ z.status }}</span>
+                    {% elif z.status == 'На процессе продажи' %}
+                        <span class="status-badge status-sale">{{ z.status }}</span>
+                    {% elif z.status == 'Выполнена' %}
+                        <span class="status-badge status-done">✓ {{ z.status }}</span>
+                    {% elif z.status == 'Ошибка' %}
+                        <span class="status-badge status-error">✗ {{ z.status }}</span>
+                    {% endif %}
+                    {% if z.status == 'Ошибка' and z.rejection_reason %}
+                    <div style="font-size: 0.78rem; color: var(--danger); margin-top: 0.4rem; max-width: 220px; line-height: 1.3;">
+                        {{ z.rejection_reason }}
+                    </div>
+                    {% endif %}
+                </td>
+                {% if request.user.is_staff %}
+                <td>
+                    {% if z.status == 'Создана' or z.status == 'Ошибка' %}
+                    <a href="{% url 'zayavka_process' z.id %}" class="btn"
+                        style="padding: 0.35rem 0.75rem; font-size: 0.82rem; background: var(--accent);">
+                        Обработать
+                    </a>
+                    {% elif z.status == 'Выполнена' %}
+                    <span style="color: var(--accent); font-size: 0.85rem;">Готово</span>
+                    {% else %}
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">—</span>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                    Заявок пока нет.
+                    <a href="{% url 'zayavki_create' %}" style="color: var(--primary); text-decoration: none; margin-left: 0.5rem;">Подать первую заявку →</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

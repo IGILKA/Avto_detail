@@ -1,0 +1,28 @@
+{% extends 'layout/base.html' %}
+{% block title %}Новое производство{% endblock %}
+{% block content %}
+<div class="card">
+    <h1>Запуск производства</h1>
+    <form method="post" style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px;">
+        {% csrf_token %}
+        <label>Выберите продукцию:</label>
+        <select name="produkcia" required
+            style="padding: 0.5rem; border-radius: 0.5rem; background: #1e293b; color: white;">
+            {% for p in produkcia %}
+            <option value="{{ p.id }}">{{ p.name }}</option>
+            {% endfor %}
+        </select>
+        <label>Количество для производства:</label>
+        <input type="number" step="1" name="quantity" required
+            style="padding: 0.5rem; border-radius: 0.5rem; background: #1e293b; color: white;">
+        <label>Ответственный сотрудник:</label>
+        <select name="sotrudnik" required
+            style="padding: 0.5rem; border-radius: 0.5rem; background: #1e293b; color: white;">
+            {% for s in sotrudniki %}
+            <option value="{{ s.id }}">{{ s.fio }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn" style="margin-top: 1rem;">Запустить</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Вход в систему{% endblock %}
+
+{% block content %}
+<div class="auth-card" style="animation: slideIn 0.5s ease cubic-bezier(0.2, 0.8, 0.2, 1);">
+    <h2>Добро пожаловать</h2>
+    <form method="post" style="text-align: left;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-large">Войти в панель</button>
+    </form>
+    <p style="text-align: center; margin-top: 1.5rem; margin-bottom: 0; color: var(--text-muted);">
+        Нет аккаунта? <a href="{% url 'register' %}"
+            style="color: #818cf8; text-decoration: none; font-weight: 600; transition: color 0.3s;"
+            onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='#818cf8'">Регистрация</a>
+    </p>
+</div>
+
+<style>
+    @keyframes slideIn {
+        0% {
+            transform: scale(0.95);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Закупки сырья - Лаб 1{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h1>Журнал закупок сырья</h1>
+        <a href="{% url 'zakupka_create' %}" class="btn">+ Оформить закупку</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Сырье</th>
+                <th>Количество</th>
+                <th>Ед. Изм.</th>
+                <th>Сумма</th>
+                <th>Сотрудник</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for z in zakupki %}
+            <tr>
+                <td>{{ z.date|date:"d.m.Y H:i" }}</td>
+                <td>{{ z.id_syrya.name }}</td>
+                <td>{{ z.quantity }}</td>
+                <td>{{ z.id_syrya.id_edizm.name }}</td>
+                <td>{{ z.amount|floatformat:2 }} сом</td>
+                <td>{{ z.id_sotrudnika.fio }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-muted);">Закупок пока нет</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

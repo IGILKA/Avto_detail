@@ -1,0 +1,36 @@
+{% extends 'layout/base.html' %}
+{% block title %}Продажи - Лаб 3{% endblock %}
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h1>Журнал продаж</h1>
+        <a href="{% url 'prodazha_create' %}" class="btn">+ Оформить продажу</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Продукция</th>
+                <th>Количество</th>
+                <th>Сумма выручки</th>
+                <th>Сотрудник</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in prodazhi %}
+            <tr>
+                <td>{{ p.date|date:"d.m.Y H:i" }}</td>
+                <td>{{ p.id_produkcii.name }}</td>
+                <td>{{ p.quantity }}</td>
+                <td>{{ p.amount }} сом</td>
+                <td>{{ p.id_sotrudnika.fio }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center;">Продаж пока не было</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Главная - Управление предприятием{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 4rem 0;">
+    <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">Система управления <span
+            style="color: var(--primary);">АвтоДеталь</span></h1>
+    <p style="color: var(--text-muted); font-size: 1.25rem; max-width: 600px; margin: 0 auto 3rem;">
+        Комплексное решение для управления закупками, производством и продажами автодеталей с интеграцией в SQL Server.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        <div class="card" style="margin-bottom: 0;">
+            <h3>Закупки</h3>
+            <p style="color: var(--text-muted);">Управление поставками сырья и бюджетом.</p>
+            <a href="{% url 'zakupka_list' %}" class="btn">Перейти</a>
+        </div>
+        <div class="card" style="margin-bottom: 0;">
+            <h3>Производство</h3>
+            <p style="color: var(--text-muted);">Переработка сырья в готовую продукцию.</p>
+            <a href="{% url 'proizvodstvo_list' %}" class="btn">Перейти</a>
+        </div>
+        <div class="card" style="margin-bottom: 0;">
+            <h3>Продажи</h3>
+            <p style="color: var(--text-muted);">Сбыт продукции и учет выручки.</p>
+            <a href="{% url 'prodazha_list' %}" class="btn">Перейти</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

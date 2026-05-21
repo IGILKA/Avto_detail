@@ -1,0 +1,382 @@
+{
+    "ЕдиницыИзмерения": [
+        {
+            "name": "ИД",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Наименование",
+            "type": "nvarchar",
+            "max_length": 50,
+            "nullable": false
+        }
+    ],
+    "Должности": [
+        {
+            "name": "ИД",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Должность",
+            "type": "nvarchar",
+            "max_length": 100,
+            "nullable": false
+        }
+    ],
+    "Сотрудники": [
+        {
+            "name": "ИД",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "ФИО",
+            "type": "nvarchar",
+            "max_length": 200,
+            "nullable": false
+        },
+        {
+            "name": "ИД_Должности",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "ЗаработнаяПлата",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Адрес",
+            "type": "nvarchar",
+            "max_length": 300,
+            "nullable": true
+        },
+        {
+            "name": "Телефон",
+            "type": "nvarchar",
+            "max_length": 30,
+            "nullable": true
+        }
+    ],
+    "Бюджет": [
+        {
+            "name": "ИД",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "СуммаБюджета",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        }
+    ],
+    "Сырье": [
+        {
+            "name": "ИД",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Наименование",
+            "type": "nvarchar",
+            "max_length": 150,
+            "nullable": false
+        },
+        {
+            "name": "ИД_ЕдИзм",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Количество",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Сумма",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        }
+    ],
+    "ГотоваяПродукция": [
+        {
+            "name": "ИД",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Наименование",
+            "type": "nvarchar",
+            "max_length": 150,
+            "nullable": false
+        },
+        {
+            "name": "ИД_ЕдИзм",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Количество",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Сумма",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        }
+    ],
+    "Ингредиенты": [
+        {
+            "name": "ИД",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "ИД_Продукции",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "ИД_Сырья",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Количество",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        }
+    ],
+    "ЗакупкаСырья": [
+        {
+            "name": "ИД",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "ИД_Сырья",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Количество",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Сумма",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Дата",
+            "type": "datetime2",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "ИД_Сотрудника",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        }
+    ],
+    "ПроизводствоПродукции": [
+        {
+            "name": "ИД",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "ИД_Продукции",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Количество",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Дата",
+            "type": "datetime2",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "ИД_Сотрудника",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        }
+    ],
+    "ПродажаПродукции": [
+        {
+            "name": "ИД",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "ИД_Продукции",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Количество",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Сумма",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Дата",
+            "type": "datetime2",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "ИД_Сотрудника",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        }
+    ],
+    "Вид_СкладСырья": [
+        {
+            "name": "ИД",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Наименование",
+            "type": "nvarchar",
+            "max_length": 150,
+            "nullable": false
+        },
+        {
+            "name": "ЕдИзм",
+            "type": "nvarchar",
+            "max_length": 50,
+            "nullable": false
+        },
+        {
+            "name": "Количество",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Сумма",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        }
+    ],
+    "Вид_СкладГотовойПродукции": [
+        {
+            "name": "ИД",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Наименование",
+            "type": "nvarchar",
+            "max_length": 150,
+            "nullable": false
+        },
+        {
+            "name": "ЕдИзм",
+            "type": "nvarchar",
+            "max_length": 50,
+            "nullable": false
+        },
+        {
+            "name": "Количество",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Сумма",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        }
+    ],
+    "Вид_ЖурналЗакупок": [
+        {
+            "name": "ИД",
+            "type": "int",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Дата",
+            "type": "datetime2",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Сырье",
+            "type": "nvarchar",
+            "max_length": 150,
+            "nullable": false
+        },
+        {
+            "name": "Количество",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Сумма",
+            "type": "float",
+            "max_length": null,
+            "nullable": false
+        },
+        {
+            "name": "Сотрудник",
+            "type": "nvarchar",
+            "max_length": 200,
+            "nullable": false
+        }
+    ]
+}

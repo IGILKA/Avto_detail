@@ -1,0 +1,33 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<div class="auth-card" style="animation: dropIn 0.5s ease cubic-bezier(0.2, 0.8, 0.2, 1);">
+    <h2>Создать аккаунт</h2>
+    <form method="post" style="text-align: left;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-large">Зарегистрироваться</button>
+    </form>
+    <p style="text-align: center; margin-top: 1.5rem; margin-bottom: 0; color: var(--text-muted);">
+        Уже есть аккаунт? <a href="{% url 'login' %}"
+            style="color: #818cf8; text-decoration: none; font-weight: 600; transition: color 0.3s;"
+            onmouseover="this.style.color='#f8fafc'" onmouseout="this.style.color='#818cf8'">Войти</a>
+    </p>
+</div>
+
+<style>
+    @keyframes dropIn {
+        0% {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+</style>
+{% endblock %}

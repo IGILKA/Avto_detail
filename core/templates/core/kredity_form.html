@@ -1,0 +1,59 @@
+{% extends 'layout/base.html' %}
+{% block title %}Кредит - Лаб 5{% endblock %}
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <div class="card">
+        <h2>Получение кредита для бизнеса</h2>
+        <p style="color: var(--text-muted);">У вас {{ active_kredits.count }} активных кредитов (максимум 3).</p>
+
+        {% if active_kredits.count < 3 %} <form method="post"
+            style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="take">
+            <label>Сумма кредита (сом):</label>
+            <input type="number" step="100" name="amount" required
+                style="padding: 0.75rem; border-radius: 0.75rem; background: #1e293b; color: white; border: 1px solid var(--border);">
+            <button type="submit" class="btn">Получить средства</button>
+            </form>
+            {% else %}
+            <p style="color: #ef4444; margin-top: 1rem; font-weight: bold;">Вы достигли лимита кредитов. Погасите
+                активные кредиты, чтобы взять новые.</p>
+            {% endif %}
+    </div>
+
+    <div class="card">
+        <h2>Ваши активные кредиты</h2>
+        {% if active_kredits %}
+        <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+            <thead>
+                <tr>
+                    <th style="text-align: left; padding: 0.5rem; border-bottom: 1px solid var(--border);">Сумма</th>
+                    <th style="text-align: left; padding: 0.5rem; border-bottom: 1px solid var(--border);">Дата</th>
+                    <th style="text-align: left; padding: 0.5rem; border-bottom: 1px solid var(--border);">Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for kredit in active_kredits %}
+                <tr>
+                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--border);">{{ kredit.amount }} сом</td>
+                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--border);">{{
+                        kredit.date_taken|date:"d.m.Y H:i" }}</td>
+                    <td style="padding: 0.5rem; border-bottom: 1px solid var(--border);">
+                        <form method="post" style="margin: 0;">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="pay">
+                            <input type="hidden" name="kredit_id" value="{{ kredit.id }}">
+                            <button type="submit" class="btn btn-secondary"
+                                style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background: #ef4444; color: white;">Погасить</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="color: var(--text-muted); margin-top: 1rem;">У вас нет активных кредитов.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

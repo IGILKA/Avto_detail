@@ -1,0 +1,80 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Новая закупка{% endblock %}
+
+{% block extra_style %}
+form {
+display: flex;
+flex-direction: column;
+gap: 1.5rem;
+max-width: 500px;
+}
+
+.form-group {
+display: flex;
+flex-direction: column;
+gap: 0.5rem;
+}
+
+label {
+color: var(--text-muted);
+font-size: 0.9rem;
+}
+
+select, input {
+background: rgba(15, 23, 42, 0.5);
+border: 1px solid var(--glass-border);
+border-radius: 0.75rem;
+padding: 0.75rem;
+color: white;
+font-family: inherit;
+outline: none;
+}
+
+select:focus, input:focus {
+border-color: var(--primary);
+}
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Оформление закупки</h1>
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="syrie">Сырье</label>
+            <select name="syrie" id="syrie" required>
+                {% for s in syrie %}
+                <option value="{{ s.id }}">{{ s.name }} (Остаток: {{ s.quantity }})</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="quantity">Количество</label>
+            <input type="number" step="0.01" name="quantity" id="quantity" required>
+        </div>
+
+        <div class="form-group">
+            <label for="amount">Сумма (сом)</label>
+            <input type="number" step="0.1" name="amount" id="amount" required>
+        </div>
+
+        <div class="form-group">
+            <label for="sotrudnik">Ответственный сотрудник</label>
+            <select name="sotrudnik" id="sotrudnik" required>
+                {% for s in sotrudniki %}
+                <option value="{{ s.id }}">{{ s.fio }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div style="margin-top: 1rem;">
+            <button type="submit" class="btn">Закупить</button>
+            <a href="{% url 'zakupka_list' %}"
+                style="margin-left: 1rem; color: var(--text-muted); text-decoration: none;">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

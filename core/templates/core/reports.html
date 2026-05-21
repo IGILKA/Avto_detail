@@ -1,0 +1,179 @@
+{% extends 'layout/base.html' %}
+{% block title %}Отчеты - Лаб 6{% endblock %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div
+    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card" style="margin-bottom: 0;">
+        <div style="color: var(--text-muted);">Бюджет предприятия</div>
+        <div style="font-size: 2rem; font-weight: 700; color: var(--accent);">{{ budget.amount|floatformat:2 }} сом
+        </div>
+    </div>
+    <div class="card" style="margin-bottom: 0;">
+        <div style="color: var(--text-muted);">Выручка (Продажи)</div>
+        <div style="font-size: 2rem; font-weight: 700; color: #10b981;">{{ financials.revenue|floatformat:2 }} сом</div>
+    </div>
+    <div class="card" style="margin-bottom: 0;">
+        <div style="color: var(--text-muted);">Расходы (Закупки сырья)</div>
+        <div style="font-size: 2rem; font-weight: 700; color: #ef4444;">{{ financials.expenses|floatformat:2 }} сом
+        </div>
+    </div>
+    <div class="card" style="margin-bottom: 0;">
+        <div style="color: var(--text-muted);">Прибыль</div>
+        <div
+            style="font-size: 2rem; font-weight: 700; color: {% if financials.profit >= 0 %}#10b981{% else %}#ef4444{% endif %};">
+            {{ financials.profit|floatformat:2 }} сом
+        </div>
+    </div>
+    <div class="card" style="margin-bottom: 0;">
+        <div style="color: var(--text-muted);">Операций проведено</div>
+        <div style="font-size: 2rem; font-weight: 700;">{{ stats.zakupki|add:stats.proizvodstvo|add:stats.prodazhi }}
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Закупок: {{ stats.zakupki }} | Пр-во: {{
+            stats.proizvodstvo }} | Продаж: {{ stats.prodazhi }}</div>
+    </div>
+</div>
+
+<h2 style="margin-bottom: 1rem; color: var(--text-main);">Дополнительные финансовые показатели</h2>
+<div
+    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card" style="margin-bottom: 0;">
+        <div style="color: var(--text-muted);">Фонд заработной платы</div>
+        <div style="font-size: 2rem; font-weight: 700; color: #f59e0b;">{{ financials.salary_str }} сом</div>
+    </div>
+    <div class="card" style="margin-bottom: 0;">
+        <div style="color: var(--text-muted);">Активный долг (Кредиты)</div>
+        <div style="font-size: 2rem; font-weight: 700; color: #ef4444;">{{ financials.debt_str }} сом</div>
+    </div>
+    <div class="card" style="margin-bottom: 0;">
+        <div style="color: var(--text-muted);">Капитал в запасах</div>
+        <div style="font-size: 2rem; font-weight: 700; color: #8b5cf6;">{{ financials.inventory_str }} сом</div>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h2>Финансовый график</h2>
+    <div style="height: 300px;">
+        <canvas id="financialChart"></canvas>
+    </div>
+</div>
+
+<script>
+    const ctx = document.getElementById('financialChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Выручка', 'Расходы', 'Прибыль'],
+            datasets: [{
+                label: 'Сумма (сом)',
+                data: [{{ financials.revenue_str }}, {{ financials.expenses_str }}, {{ financials.profit_str }}],
+        backgroundColor: [
+        'rgba(16, 185, 129, 0.6)',
+        'rgba(239, 68, 68, 0.6)',
+        'rgba(59, 130, 246, 0.6)'
+    ],
+        borderColor: [
+        'rgb(16, 185, 129)',
+        'rgb(239, 68, 68)',
+        'rgb(59, 130, 246)'
+    ],
+        borderWidth: 1
+            }]
+        },
+        options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+    });
+</script>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h2>Последние финансовые операции</h2>
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border);">Дата</th>
+                    <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border);">Тип</th>
+                    <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border);">Товар/Сырье
+                    </th>
+                    <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border);">Сотрудник
+                    </th>
+                    <th style="padding: 0.75rem; text-align: right; border-bottom: 1px solid var(--border);">Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for op in operations %}
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.75rem;">{{ op.date|date:"d.m.Y H:i" }}</td>
+                    <td style="padding: 0.75rem;">
+                        <span style="padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.8rem;
+                            background: {% if op.is_income %}rgba(16, 185, 129, 0.2){% else %}rgba(239, 68, 68, 0.2){% endif %};
+                            color: {% if op.is_income %}#10b981{% else %}#ef4444{% endif %};">
+                            {{ op.type }}
+                        </span>
+                    </td>
+                    <td style="padding: 0.75rem;">{{ op.item }}</td>
+                    <td style="padding: 0.75rem; color: var(--text-muted);">{{ op.employee }}</td>
+                    <td
+                        style="padding: 0.75rem; text-align: right; font-weight: 600; color: {% if op.is_income %}#10b981{% else %}#ef4444{% endif %};">
+                        {% if op.is_income %}+{% else %}-{% endif %}{{ op.amount|floatformat:2 }}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="padding: 1rem; text-align: center; color: var(--text-muted);">Операций пока
+                        нет</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <div class="card">
+        <h2>Склад сырья</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Остаток</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in syrie %}
+                <tr>
+                    <td>{{ s.name }}</td>
+                    <td>{{ s.quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card">
+        <h2>Склад готовой продукции</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Остаток</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in produkcia %}
+                <tr>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
